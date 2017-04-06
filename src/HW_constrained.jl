@@ -10,9 +10,22 @@ module HW_constrained
 
 	export data, table_NLopt, table_JuMP
 
+    function input(prompt::AbstractString="")
+       print(prompt)
+       return chomp(readline())
+    end
+
     #define u and uprime for NLopt
     u(a,c) = -exp(-a*c)
     uprime(a,c) = a*exp(-a*c)
+
+    # define "truth"
+    truth = DataFrame(a = [0.5, 1.0, 5.0], 
+    c = [1.00801, 1.00401, 1.008], 
+    omega1 = [-1.41237, -.206197, .758762], 
+    omega2 = [.801458, .400729, .0801456], 
+    omega3 = [1.60291, .801462, .160291], 
+    fval = [-1.20821, -.732819, -.013422])
 
 	function data(a=1)
         pi = 1/16
@@ -139,14 +152,16 @@ module HW_constrained
 		include("test/runtests.jl")
 		println("")
 		println("JumP:")
-		table_JuMP()
+		display(table_JuMP())
 		println("")
 		println("NLopt:")
-		table_NLopt()
-		#ok = input("enter y to close this session.")
-		#if ok == "y"
-		#	quit()
-		#end
+		display(table_NLopt())
+        println("Truth:")                                                                                                                                
+        display(truth)                                                                                                              
+		ok = input("enter y to close this session.")
+		if ok == "y"
+			quit()
+		end
 	end
 
 
